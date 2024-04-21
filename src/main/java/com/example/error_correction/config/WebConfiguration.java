@@ -11,6 +11,6 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtInterceport())
                 .addPathPatterns("/**") // 拦截所有路径
-                .excludePathPatterns("/login","/reset_pd","register");  // 排除不需要Token验证的路径
+                .excludePathPatterns("/login","/reset_pd","/register");  // 排除不需要Token验证的路径
     }
 }

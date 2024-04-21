@@ -10,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
+import java.util.Date;
 
 @RestController
 public class LoginController {
@@ -46,7 +45,7 @@ public class LoginController {
     public Result sign(String username, String password, String phone){
         User userFromDB = userMapper.findByUsername(username);
         if(userFromDB == null){
-            LocalDateTime dateTime = LocalDateTime.now();
+            Date dateTime =new java.util.Date();
             User user = new User(username,password,phone,dateTime,null,0);
             userMapper.insert(user);
             return Result.success().data("user",user);

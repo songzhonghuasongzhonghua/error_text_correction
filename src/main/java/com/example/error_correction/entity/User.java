@@ -1,16 +1,7 @@
 package com.example.error_correction.entity;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
 
 public class User {
     @TableId
@@ -18,10 +9,10 @@ public class User {
     private String username;
     private String password;
     private String phone;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    private LocalDateTime createAt;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    private LocalDateTime  birth;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date   birth;
 
 
     @Override
@@ -65,11 +56,11 @@ public class User {
         this.phone = phone;
     }
 
-    public void setCreateAt(LocalDateTime  createAt) {
+    public void setCreateAt(java.util.Date  createAt) {
         this.createAt = createAt;
     }
 
-    public void setBirth(LocalDateTime  birth) {
+    public void setBirth(java.util.Date  birth) {
         this.birth = birth;
     }
 
@@ -89,14 +80,12 @@ public class User {
         return phone;
     }
 
-    public OffsetDateTime  getCreateAt() {
-        if(this.createAt == null) {
-            return null;
-        }
-        return createAt.atOffset(ZoneOffset.UTC);
+    public java.util.Date  getCreateAt() {
+
+        return createAt;
     }
 
-    public User( String username, String password, String phone, LocalDateTime createAt, LocalDateTime birth, int type) {
+    public User( String username, String password, String phone, java.util.Date createAt, java.util.Date birth, int type) {
 
         this.username = username;
         this.password = password;
@@ -108,11 +97,8 @@ public class User {
 
     public User(){}
 
-    public OffsetDateTime getBirth() {
-        if(this.birth == null) {
-            return null;
-        }
-        return birth.atOffset(ZoneOffset.UTC);
+    public java.util.Date getBirth() {
+        return birth;
     }
 
 
