@@ -10,7 +10,9 @@ import com.example.error_correction.entity.response.EnglishToolRes;
 import com.example.error_correction.entity.response.LlmCorrectionRes;
 import com.example.error_correction.mapper.TextMapper;
 import com.example.error_correction.mapper.UserMapper;
+import com.example.error_correction.utils.JwtUtil;
 import com.example.error_correction.utils.Result;
+import io.jsonwebtoken.Claims;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -45,7 +49,7 @@ public class UserController {
 
 
     //更新个人信息
-    @PutMapping("/info")
+    @PostMapping("/info_edit")
     public Result updateUser(@RequestBody User user) {
         User userFromDB = userMapper.selectById(user.getId());
         //未找到用户
@@ -59,6 +63,27 @@ public class UserController {
 
     }
 
+
+    //获取个人信息
+    @GetMapping("/info")
+    public Result getUser(HttpServletRequest request, HttpServletResponse response) {
+       String token =  request.getHeader("Authorization");
+       if (token == null){
+           return Result.failed().message("token不能为空");
+       }
+        Claims claims =  JwtUtil.parseToken(token);
+       if (claims == null){
+           response.setStatus(401);
+           return Result.failed().message("token解析失败");
+       }
+
+       User user = userMapper.findByUsername(claims.getSubject());
+       if(user == null){
+           return Result.failed().message("用户不存在");
+       }
+       return Result.success().data("info",user);
+
+    }
 
     //中英文纠错
     @PostMapping("error_correction")

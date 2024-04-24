@@ -1,6 +1,7 @@
 package com.example.error_correction.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -19,6 +20,16 @@ public class JwtUtil {
     }
 
     public static Claims parseToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        try {
+            Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            // 如果没有抛出异常，表示token解析成功
+            // 在这里处理解析成功后的逻辑
+            return claims;
+        } catch (JwtException e) {
+            // 捕获JwtException异常，表示token解析出错
+            // 在这里处理token解析出错的情况
+            System.out.println("Token解析出错：" + e.getMessage());
+            return null;
+        }
     }
 }

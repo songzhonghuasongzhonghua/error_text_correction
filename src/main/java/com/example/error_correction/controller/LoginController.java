@@ -72,7 +72,6 @@ public class LoginController {
             if(userFromDB.getPassword().equals(password)){
                 return Result.failed().message("密码相同");
             }
-
             // 创建UpdateWrapper对象，设置更新条件
             UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("username", username);

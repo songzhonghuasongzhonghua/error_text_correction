@@ -11,6 +11,7 @@ import com.example.error_correction.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
@@ -45,7 +46,7 @@ public class AdminController  {
     }
 
     //删除普通用户或管理员
-    @DeleteMapping("user")
+    @GetMapping("/user_del")
     public Result user_del(@RequestParam(required = true) int id) {
          int delId =  userMapper.deleteById(id);
          if(delId  == 0) {
@@ -62,7 +63,8 @@ public class AdminController  {
         if(userFromDB != null) {
             return Result.failed().message("用户名已存在");
         }
-
+        Date dateTime = new java.util.Date();
+        user.setCreateAt(dateTime);
       userMapper.insert(user);
       return Result.success();
     }
@@ -92,7 +94,7 @@ public class AdminController  {
 
 
     //删除文本
-    @DeleteMapping("/text")
+    @GetMapping("/text_del")
     public Result text_del(@RequestParam(required = true) int id) {
         Text textFromDB = textMapper.selectById(id);
         if(textFromDB == null) {
