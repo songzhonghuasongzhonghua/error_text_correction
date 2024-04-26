@@ -32,13 +32,17 @@ public class AdminController  {
     public Result user_list(@RequestParam(required = true) int page,
                             @RequestParam(required = true) int pageSize,
                             @RequestParam(required = true) int type,
-                            @RequestParam(required = false) Integer id) {
+                            @RequestParam(required = false) Integer id,
+                            @RequestParam(required = false) String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         //筛选普通用户列表
         queryWrapper.eq("type", type);
         if(id != null) {
             //搜索id
             queryWrapper.eq("id", id);
+        }
+        if(username != null) {
+            queryWrapper.like("username", username);
         }
         Page<User> userPage = new Page<>(page,pageSize);
         Page<User>  userList = userMapper.selectPage(userPage,queryWrapper);
@@ -77,7 +81,8 @@ public class AdminController  {
     public Result text_list(@RequestParam(required = true) int page,
                             @RequestParam(required = true) int pageSize,
                             @RequestParam(required = false) Integer listId,
-                            @RequestParam(required = false) Integer userId){
+                            @RequestParam(required = false) Integer userId,
+                            @RequestParam(required = false) String username){
 
 
         QueryWrapper<Text> queryWrapper = new QueryWrapper<>();
@@ -88,7 +93,7 @@ public class AdminController  {
             queryWrapper.eq("user_id", userId);
         }
         Page<Text> textPage = new Page<>(page,pageSize);
-        Page<Text> textList = textMapper.selectPage(textPage,queryWrapper,listId,userId);
+        Page<Text> textList = textMapper.selectPage(textPage,queryWrapper,listId,userId,username);
         return Result.success().data("info",textList);
     }
 

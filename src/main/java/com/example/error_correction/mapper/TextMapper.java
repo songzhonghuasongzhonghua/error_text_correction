@@ -17,13 +17,17 @@ public interface TextMapper extends BaseMapper<Text> {
     //查询文本列表
     @Select({
             "<script>",
-            "select * from text",
+            "select t.*, u.username as user_username from text t",
+            "left join user u on t.user_id = u.id",
             "<where>",
             "<if test='id != null'>",
-            "and id = #{id}",
+            "and t.id = #{id}",
             "</if>",
             "<if test='userId != null'>",
-            "and user_id = #{userId}",
+            "and t.user_id = #{userId}",
+            "</if>",
+            "<if test='userName != null'>",
+            "and u.username like concat('%', #{userName}, '%')",
             "</if>",
             "</where>",
             "</script>"
@@ -37,7 +41,7 @@ public interface TextMapper extends BaseMapper<Text> {
             @Result(column = "user_id", property = "user", javaType = User.class,
                     one = @One(select = "com.example.error_correction.mapper.UserMapper.selectById", fetchType = FetchType.LAZY))
     })
-    Page<Text> selectPage(Page<Text> page, QueryWrapper<Text> queryWrapper,Integer id,Integer userId);
+    Page<Text> selectPage(Page<Text> page, QueryWrapper<Text> queryWrapper,Integer id,Integer userId,String userName);
 
 
 
